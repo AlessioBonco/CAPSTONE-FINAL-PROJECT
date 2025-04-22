@@ -12,75 +12,30 @@ const RegisterPage = () => {
     adminCode: '' // nuovo campo
   });
 
-  const registerUser = async (req, res) => {
-    const { username, email, password } = req.body;
-  
-    try {
-      // Verifica il formato dell'email
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        return res.status(400).json({ error: 'Formato email non valido.' });
-      }
-  
-      // Verifica se l'email esiste realmente usando Hunter.io
-      const hunterApiKey = process.env.HUNTER_API_KEY; // Aggiungi la chiave API nel file .env
-      const hunterResponse = await axios.get(`https://api.hunter.io/v2/email-verifier?email=${email}&api_key=${hunterApiKey}`);
-      const emailExists = hunterResponse.data.data.status === 'valid';
-  
-      if (!emailExists) {
-        return res.status(400).json({ error: 'L\'email fornita non esiste realmente.' });
-      }
-  
-      // Verifica se l'email è già registrata
-      const existingUser = await User.findOne({ email });
-      if (existingUser) {
-        return res.status(400).json({ error: 'Email già registrata.' });
-      }
-  
-      // Hash della password
-      const hashedPassword = await bcrypt.hash(password, 10);
-  
-      // Crea un nuovo utente
-      const newUser = new User({
-        username,
-        email,
-        password: hashedPassword,
-      });
-  
-      await newUser.save();
-  
-      res.status(201).json({ message: 'Registrazione completata con successo.' });
-    } catch (err) {
-      console.error('❌ Errore durante la registrazione:', err);
-      res.status(500).json({ error: 'Errore del server. Riprova più tardi.' });
-    }
-  };
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
-  
-    // ✅ Codice per attivare ruolo admin
+
     let roleToSend = 'user';
-  
+
     if (formData.role === 'admin') {
       if (formData.adminCode !== 'sn3i2wmort!') {
         return alert('Codice admin non valido.');
       }
       roleToSend = 'admin';
     }
-  
+
     try {
-      await axios.post('http://localhost:5000/api/auth/register', {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/register`, {
         username: formData.username,
         email: formData.email,
         password: formData.password,
         role: roleToSend
       });
-  
+
       alert('Registrazione completata! Ora puoi fare login.');
       navigate('/login');
     } catch (err) {
@@ -88,7 +43,6 @@ const RegisterPage = () => {
       alert(msg);
     }
   };
-  
 
   return (
     <div className="d-flex justify-content-center align-items-center" style={styles.page}>
