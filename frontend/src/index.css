@@ -1,0 +1,53 @@
+/* Stile generale */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Media Query per dispositivi mobili */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 eventi per riga anche su mobile */
+  }
+
+  .card {
+    padding: 1rem;
+    margin: 1rem auto;
+    width: 90%; /* Riduci la larghezza delle card */
+  }
+
+  .pagination {
+    flex-direction: column; /* Imposta i pulsanti di paginazione in colonna */
+    gap: 0.5rem;
+  }
+
+  .paginationButton {
+    width: 100%; /* I pulsanti occupano tutta la larghezza */
+  }
+
+  .footer {
+    font-size: 0.9rem; /* Riduci la dimensione del testo nel footer */
+  }
+}
+
+/* Media Query per tablet */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 eventi per riga */
+  }
+
+  .card {
+    padding: 1.2rem;
+    margin: 1rem auto;
+    width: 95%; /* Riduci leggermente la larghezza delle card */
+  }
+}
